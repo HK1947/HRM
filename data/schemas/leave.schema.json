@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "leave",
+  "title": "LeaveRequest",
+  "type": "object",
+  "required": ["employeeId", "leaveType", "fromDate", "toDate", "status"],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "employeeId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "leaveType": {
+      "type": "string",
+      "enum": ["Annual Leave", "Sick Leave", "Maternity Leave", "Unpaid Leave"]
+    },
+    "fromDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "toDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "comments": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Pending", "Approved", "Rejected", "Cancelled"]
+    }
+  },
+  "additionalProperties": false
+}
