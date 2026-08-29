@@ -12,3 +12,4 @@
 
 export * from './base.page';
 export * from './components';
+export * from './login.page';
