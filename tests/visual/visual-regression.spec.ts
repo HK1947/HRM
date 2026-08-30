@@ -1,17 +1,31 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * VISUAL REGRESSION TESTS - Screenshot Comparison
+ * VISUAL REGRESSION TESTS - Screenshot Comparison (Per-Browser Baselines)
  * ═══════════════════════════════════════════════════════════════════════════
  *
  * WHAT: Automated visual regression testing using screenshot comparison.
  * WHY: Catch unintended UI changes that functional tests miss.
  * IF NOT USED: Visual bugs slip into production undetected.
- * INTERVIEW TIP: "Visual tests complement functional tests - they catch CSS bugs"
+ * INTERVIEW TIP: "Visual tests need per-browser baselines - rendering differs"
+ *
+ * BASELINE STRATEGY:
+ * - Screenshots are stored in __snapshots__/<browser>/ directories
+ * - Each browser has its own baseline (Chrome renders differently than Firefox)
+ * - CI runs visual tests for all browsers in parallel
+ * - Use --update-snapshots to regenerate baselines after intentional changes
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
 import { test, expect } from '../../src/fixtures';
 import { logTestStart, logTestEnd } from '../../src/helpers';
+
+/**
+ * Helper to get browser-specific snapshot name
+ * INTERVIEW TIP: "Per-browser baselines prevent false positives from rendering differences"
+ */
+function getSnapshotName(baseName: string, browserName: string): string {
+    return `${browserName}/${baseName}`;
+}
 
 test.describe('Visual Regression Tests @visual @regression', () => {
 

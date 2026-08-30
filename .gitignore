@@ -3,6 +3,8 @@ playwright-report/
 test-results/
 blob-report/
 results/
+allure-results/
+allure-report/
 .env
 .env.local
 auth/*.json

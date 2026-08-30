@@ -1,0 +1,132 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# DOCKER COMPOSE - Multi-Container Test Environment
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# WHAT: Docker Compose configuration for test environment.
+# WHY: Orchestrate multiple services (tests, reports, databases).
+# IF NOT USED: Manual container management, complex networking.
+# INTERVIEW TIP: "Docker Compose manages multi-container applications declaratively"
+# ═══════════════════════════════════════════════════════════════════════════
+
+version: '3.8'
+
+services:
+  # Main test runner
+  playwright:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: playwright-tests
+    environment:
+      - CI=true
+      - BASE_URL=https://opensource-demo.orangehrmlive.com
+      - NODE_ENV=test
+    volumes:
+      # Mount reports for viewing outside container
+      - ./reports:/app/reports
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+    networks:
+      - test-network
+    # Override default command for different test types
+    command: ["npx", "playwright", "test"]
+
+  # Smoke test runner (fast feedback)
+  smoke-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: playwright-smoke
+    environment:
+      - CI=true
+      - NODE_ENV=test
+    volumes:
+      - ./reports:/app/reports
+    networks:
+      - test-network
+    command: ["npx", "playwright", "test", "--grep", "@smoke", "--project=chromium"]
+    profiles:
+      - smoke
+
+  # API tests only
+  api-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: playwright-api
+    environment:
+      - CI=true
+      - NODE_ENV=test
+    volumes:
+      - ./reports:/app/reports
+    networks:
+      - test-network
+    command: ["npx", "playwright", "test", "--project=api"]
+    profiles:
+      - api
+
+  # Visual regression tests
+  visual-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: playwright-visual
+    environment:
+      - CI=true
+      - NODE_ENV=test
+    volumes:
+      - ./reports:/app/reports
+      - ./test-results:/app/test-results
+    networks:
+      - test-network
+    command: ["npx", "playwright", "test", "--grep", "@visual"]
+    profiles:
+      - visual
+
+  # Test report server (optional)
+  report-server:
+    image: nginx:alpine
+    container_name: playwright-reports
+    ports:
+      - "8080:80"
+    volumes:
+      - ./playwright-report:/usr/share/nginx/html:ro
+    networks:
+      - test-network
+    profiles:
+      - reports
+
+networks:
+  test-network:
+    driver: bridge
+
+# ═══════════════════════════════════════════════════════════════════════════
+# USAGE INSTRUCTIONS
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Run all tests:
+#   docker-compose up --build
+#
+# Run smoke tests only:
+#   docker-compose --profile smoke up --build smoke-tests
+#
+# Run API tests only:
+#   docker-compose --profile api up --build api-tests
+#
+# Run visual tests:
+#   docker-compose --profile visual up --build visual-tests
+#
+# Start report server:
+#   docker-compose --profile reports up report-server
+#   # Then open http://localhost:8080
+#
+# Run in background:
+#   docker-compose up -d --build
+#
+# View logs:
+#   docker-compose logs -f playwright
+#
+# Clean up:
+#   docker-compose down --volumes --remove-orphans
+#
+# ═══════════════════════════════════════════════════════════════════════════

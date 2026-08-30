@@ -1,7 +1,7 @@
 {
   "name": "playwright-enterprise-framework",
-  "version": "1.0.0",
-  "description": "Enterprise-grade Playwright + TypeScript test automation framework",
+  "version": "2.0.0",
+  "description": "Enterprise-grade Playwright + TypeScript test automation framework - Interview Ready Edition",
   "type": "module",
   "engines": {
     "node": ">=18.0.0"
@@ -11,23 +11,44 @@
     "test:smoke": "playwright test --grep @smoke",
     "test:regression": "playwright test --grep @regression",
     "test:api": "playwright test --project=api",
+    "test:a11y": "playwright test --grep @accessibility",
+    "test:visual": "playwright test --grep @visual",
+    "test:performance": "playwright test --grep @performance",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:trace": "playwright test --trace on",
+    "test:parallel": "playwright test --workers=4",
+    "test:serial": "playwright test --workers=1",
+    "test:retry": "playwright test --retries=2",
+    "test:dev": "cross-env ENV=dev playwright test",
+    "test:staging": "cross-env ENV=staging playwright test",
+    "test:prod": "cross-env ENV=prod playwright test",
     "report": "playwright show-report",
+    "report:allure": "allure generate allure-results -o allure-report --clean && allure open allure-report",
     "lint": "eslint src/ tests/ --ext .ts",
     "lint:fix": "eslint src/ tests/ --ext .ts --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "docker:build": "docker build -t playwright-tests .",
+    "docker:run": "docker run --rm playwright-tests"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.9.0",
+    "@faker-js/faker": "^8.4.1",
     "@playwright/test": "^1.45.0",
-    "typescript": "^5.4.0",
-    "eslint": "^8.57.0",
+    "@types/node": "^20.14.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
-    "winston": "^3.13.0",
     "ajv": "^8.16.0",
     "ajv-formats": "^3.0.1",
+    "allure-commandline": "^2.29.0",
+    "allure-playwright": "^3.0.0",
+    "axe-core": "^4.9.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.0",
-    "@types/node": "^20.14.0"
+    "eslint": "^8.57.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.4.0",
+    "winston": "^3.13.0"
   }
 }
