@@ -1,509 +1,333 @@
 <title>Playwright Enterprise Framework Guide</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --purple-900: #1e1b4b;
-  --purple-800: #312e81;
-  --purple-600: #4f46e5;
-  --purple-500: #6366f1;
-  --purple-400: #818cf8;
-  --purple-300: #a5b4fc;
-  --purple-100: #e0e7ff;
-  --purple-50: #eef2ff;
-
-  --emerald-500: #10b981;
-  --emerald-400: #34d399;
-  --amber-500: #f59e0b;
-  --rose-500: #f43f5e;
-
-  --slate-950: #020617;
-  --slate-900: #0f172a;
-  --slate-800: #1e293b;
-  --slate-700: #334155;
-  --slate-600: #475569;
-  --slate-500: #64748b;
-  --slate-400: #94a3b8;
-  --slate-300: #cbd5e1;
-  --slate-200: #e2e8f0;
-  --slate-100: #f1f5f9;
-  --slate-50: #f8fafc;
-
-  --bg: #fafbff;
-  --bg-card: #ffffff;
-  --bg-code: var(--slate-900);
-  --text: var(--slate-900);
-  --text-secondary: var(--slate-600);
-  --text-muted: var(--slate-500);
-  --border: var(--slate-200);
-  --accent: var(--purple-600);
-  --accent-light: var(--purple-100);
-  --gradient: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-400) 100%);
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-elevated: #21262d;
+  --text: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --accent-subtle: rgba(56, 139, 253, 0.15);
+  --green: #3fb950;
+  --green-subtle: rgba(63, 185, 80, 0.15);
+  --orange: #d29922;
+  --orange-subtle: rgba(210, 153, 34, 0.15);
+  --purple: #a371f7;
+  --purple-subtle: rgba(163, 113, 247, 0.15);
+  --red: #f85149;
+  --pink: #db61a2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: var(--slate-950);
-    --bg-card: var(--slate-900);
-    --bg-code: #0a0a0f;
-    --text: var(--slate-100);
-    --text-secondary: var(--slate-300);
-    --text-muted: var(--slate-400);
-    --border: var(--slate-800);
-    --accent: var(--purple-400);
-    --accent-light: rgba(99, 102, 241, 0.15);
-    --gradient: linear-gradient(135deg, var(--purple-500) 0%, var(--purple-300) 100%);
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-card: #f6f8fa;
+  --bg-elevated: #ffffff;
+  --text: #1f2328;
+  --text-secondary: #656d76;
+  --text-muted: #8c959f;
+  --border: #d0d7de;
+  --accent: #0969da;
+  --accent-subtle: rgba(9, 105, 218, 0.1);
+  --green: #1a7f37;
+  --green-subtle: rgba(26, 127, 55, 0.1);
+  --orange: #9a6700;
+  --orange-subtle: rgba(154, 103, 0, 0.1);
+  --purple: #8250df;
+  --purple-subtle: rgba(130, 80, 223, 0.1);
+  --red: #cf222e;
+  --pink: #bf3989;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #ffffff;
+    --bg-card: #f6f8fa;
+    --bg-elevated: #ffffff;
+    --text: #1f2328;
+    --text-secondary: #656d76;
+    --text-muted: #8c959f;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --accent-subtle: rgba(9, 105, 218, 0.1);
+    --green: #1a7f37;
+    --green-subtle: rgba(26, 127, 55, 0.1);
+    --orange: #9a6700;
+    --orange-subtle: rgba(154, 103, 0, 0.1);
+    --purple: #8250df;
+    --purple-subtle: rgba(130, 80, 223, 0.1);
+    --red: #cf222e;
+    --pink: #bf3989;
   }
-}
-
-:root[data-theme="dark"] {
-  --bg: var(--slate-950);
-  --bg-card: var(--slate-900);
-  --bg-code: #0a0a0f;
-  --text: var(--slate-100);
-  --text-secondary: var(--slate-300);
-  --text-muted: var(--slate-400);
-  --border: var(--slate-800);
-  --accent: var(--purple-400);
-  --accent-light: rgba(99, 102, 241, 0.15);
-  --gradient: linear-gradient(135deg, var(--purple-500) 0%, var(--purple-300) 100%);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.7;
+  line-height: 1.6;
+  padding: 2rem;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 1.5rem;
 }
 
-/* Hero Section */
-.hero {
-  background: var(--gradient);
-  padding: 4rem 0 6rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  opacity: 0.5;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-}
-
-.hero h1 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 2.75rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 1rem;
-  letter-spacing: -0.03em;
-}
-
-.hero p {
-  color: rgba(255,255,255,0.9);
-  font-size: 1.15rem;
-  max-width: 600px;
-}
-
-.hero-badges {
+/* Header */
+header {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.hero-badge {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  padding: 0.4rem 0.9rem;
-  border-radius: 100px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  backdrop-filter: blur(10px);
-}
-
-/* Navigation */
-nav {
-  background: var(--bg-card);
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--border);
-  padding: 1rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  margin-top: -3rem;
-  border-radius: 12px 12px 0 0;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-nav ul {
+.logo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--green), var(--accent));
+  border-radius: 12px;
   display: flex;
-  gap: 0.25rem;
-  list-style: none;
-  overflow-x: auto;
-  padding: 0 1rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
 }
 
-nav a {
-  display: block;
-  padding: 0.6rem 1rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border-radius: 8px;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-
-nav a:hover {
-  background: var(--accent-light);
-  color: var(--accent);
-}
-
-/* Main Content */
-main {
-  background: var(--bg-card);
-  padding: 3rem 2rem 4rem;
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  margin-bottom: 3rem;
-}
-
-/* Typography */
-h2 {
+header h1 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text);
-  margin: 3.5rem 0 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--accent);
   letter-spacing: -0.02em;
 }
 
-h2:first-child { margin-top: 0; }
+header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Section */
+section {
+  margin: 3rem 0;
+}
+
+h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+h2::before {
+  content: '';
+  width: 4px;
+  height: 1.25rem;
+  background: var(--accent);
+  border-radius: 2px;
+}
 
 h3 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text);
   margin: 2rem 0 1rem;
 }
 
-h4 {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  margin: 1.5rem 0 0.75rem;
+p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  max-width: 75ch;
 }
 
-p { margin-bottom: 1rem; max-width: 70ch; color: var(--text-secondary); }
+/* Diagram Container */
+.diagram-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.diagram-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.diagram-title::before {
+  content: '◈';
+  color: var(--accent);
+}
+
+.mermaid {
+  display: flex;
+  justify-content: center;
+}
 
 /* Code */
 code {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.85em;
-  background: var(--accent-light);
+  background: var(--bg-elevated);
   color: var(--accent);
-  padding: 0.2em 0.5em;
-  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  border: 1px solid var(--border);
 }
 
 pre {
-  background: var(--bg-code);
-  padding: 1.5rem;
-  border-radius: 12px;
-  overflow-x: auto;
-  margin: 1rem 0 1.5rem;
+  background: var(--bg-card);
   border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1rem 0;
 }
 
 pre code {
   background: none;
-  color: #e2e8f0;
+  border: none;
   padding: 0;
+  color: var(--text);
   font-size: 0.8rem;
   line-height: 1.7;
 }
 
-.code-comment { color: #6b7280; }
-.code-keyword { color: #c084fc; }
-.code-string { color: #34d399; }
-.code-function { color: #60a5fa; }
+.code-comment { color: var(--text-muted); }
+.code-keyword { color: var(--purple); }
+.code-string { color: var(--green); }
+.code-function { color: var(--accent); }
 
-/* Diagram Container */
-.diagram-section {
-  background: linear-gradient(180deg, var(--accent-light) 0%, transparent 100%);
-  border-radius: 16px;
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-.diagram-title {
-  text-align: center;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 1.5rem;
-}
-
-/* Mermaid styling */
-.mermaid {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-}
-
-/* Architecture Box Diagram */
-.arch-diagram {
+/* Cards Grid */
+.cards {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
-  margin: 2rem 0;
-}
-
-.arch-layer {
-  background: var(--bg);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-  position: relative;
-}
-
-.arch-layer-name {
-  position: absolute;
-  top: -0.75rem;
-  left: 1rem;
-  background: var(--bg-card);
-  padding: 0 0.5rem;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--accent);
-}
-
-.arch-boxes {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.arch-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  font-size: 0.85rem;
-  flex: 1;
-  min-width: 120px;
-  text-align: center;
-}
-
-.arch-box strong {
-  display: block;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.8rem;
-  color: var(--accent);
-  margin-bottom: 0.25rem;
-}
-
-.arch-box span {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.arch-arrow {
-  text-align: center;
-  color: var(--accent);
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-/* Flow Diagram */
-.flow-diagram {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  background: var(--bg);
-  border-radius: 12px;
-  overflow-x: auto;
   margin: 1.5rem 0;
 }
 
-.flow-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 100px;
-}
-
-.flow-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.flow-icon.config { background: linear-gradient(135deg, #818cf8, #6366f1); }
-.flow-icon.setup { background: linear-gradient(135deg, #34d399, #10b981); }
-.flow-icon.fixture { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-.flow-icon.test { background: linear-gradient(135deg, #f472b6, #ec4899); }
-.flow-icon.report { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-
-.flow-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 0.2rem;
-}
-
-.flow-desc {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  max-width: 80px;
-}
-
-.flow-arrow {
-  color: var(--accent);
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-
-/* Cards */
 .card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-.feature-card {
-  background: var(--bg);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 1.25rem;
-  transition: all 0.2s;
 }
 
-.feature-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
-.feature-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+.card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-  background: var(--accent-light);
+  font-size: 1.1rem;
 }
 
-.feature-card h4 {
+.card-icon.blue { background: var(--accent-subtle); }
+.card-icon.green { background: var(--green-subtle); }
+.card-icon.orange { background: var(--orange-subtle); }
+.card-icon.purple { background: var(--purple-subtle); }
+
+.card h4 {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text);
-  text-transform: none;
-  letter-spacing: normal;
-  margin: 0 0 0.5rem 0;
 }
 
-.feature-card p {
+.card p {
   font-size: 0.85rem;
   color: var(--text-muted);
   margin: 0;
 }
 
-/* Interview Q&A */
-.qa-card {
-  background: linear-gradient(135deg, var(--accent-light), transparent);
-  border: 1px solid var(--accent);
-  border-radius: 12px;
-  padding: 1.5rem;
+/* Q&A */
+.qa {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem;
   margin: 1rem 0;
 }
 
-.qa-question {
-  font-family: 'Space Grotesk', sans-serif;
+.qa-q {
   font-weight: 600;
   color: var(--accent);
   margin-bottom: 0.75rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
+  font-size: 0.95rem;
 }
 
-.qa-question::before {
-  content: 'Q';
-  background: var(--accent);
-  color: #fff;
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  flex-shrink: 0;
-}
-
-.qa-answer {
-  padding-left: 2rem;
+.qa-a {
   color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
 }
 
-.qa-answer strong {
+.qa-a strong {
   color: var(--text);
 }
 
-/* Tip Box */
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+
+th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+tr:hover td {
+  background: var(--accent-subtle);
+}
+
+/* Tip */
 .tip {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
-  border-left: 4px solid var(--emerald-500);
-  border-radius: 0 12px 12px 0;
-  padding: 1.25rem 1.5rem;
+  background: var(--green-subtle);
+  border: 1px solid var(--green);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
   margin: 1.5rem 0;
 }
 
@@ -513,7 +337,7 @@ pre code {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--emerald-500);
+  color: var(--green);
   margin-bottom: 0.5rem;
 }
 
@@ -522,438 +346,456 @@ pre code {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--bg-code);
-  padding: 0.9rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
   border-radius: 8px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.85rem;
   margin: 0.5rem 0;
-  color: #e2e8f0;
 }
 
 .cmd-prefix {
-  color: var(--emerald-400);
+  color: var(--green);
   user-select: none;
 }
-
-/* Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0 1.5rem;
-  font-size: 0.875rem;
-}
-
-th {
-  text-align: left;
-  padding: 0.9rem 1rem;
-  background: var(--accent-light);
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--accent);
-  border-bottom: 2px solid var(--accent);
-}
-
-td {
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-secondary);
-}
-
-tr:hover td { background: var(--accent-light); }
 
 /* Tree */
 .tree {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.8rem;
-  line-height: 1.9;
-  background: var(--bg);
+  line-height: 1.8;
+  background: var(--bg-card);
   border: 1px solid var(--border);
-  padding: 1.5rem;
   border-radius: 12px;
+  padding: 1.25rem;
   overflow-x: auto;
 }
 
-.tree .f { color: var(--accent); font-weight: 500; }
-.tree .d { color: var(--text-muted); }
+.tree .folder { color: var(--accent); font-weight: 500; }
+.tree .desc { color: var(--text-muted); }
 
-/* Responsive */
-@media (max-width: 640px) {
-  .hero h1 { font-size: 2rem; }
-  nav ul { gap: 0; }
-  nav a { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
-  main { padding: 2rem 1rem; }
-  .flow-diagram { flex-wrap: wrap; justify-content: center; }
-  .flow-arrow { display: none; }
+/* Nav */
+nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+nav a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 </style>
 
-<header class="hero">
-  <div class="container hero-content">
-    <h1>🎭 Playwright Enterprise Framework</h1>
-    <p>Complete architecture guide, test execution flows, and interview preparation for the OrangeHRM automation framework</p>
-    <div class="hero-badges">
-      <span class="hero-badge">TypeScript</span>
-      <span class="hero-badge">Page Object Model</span>
-      <span class="hero-badge">axe-core A11y</span>
-      <span class="hero-badge">Web Vitals</span>
-      <span class="hero-badge">CI/CD Ready</span>
-    </div>
-  </div>
-</header>
-
 <div class="container">
+  <header>
+    <div class="logo">🎭</div>
+    <div>
+      <h1>Playwright Enterprise Framework</h1>
+      <p>Architecture guide, execution flows, and interview reference for OrangeHRM test automation</p>
+    </div>
+  </header>
+
   <nav>
-    <ul>
-      <li><a href="#architecture">Architecture</a></li>
-      <li><a href="#flow">Execution Flow</a></li>
-      <li><a href="#structure">Structure</a></li>
-      <li><a href="#commands">Commands</a></li>
-      <li><a href="#patterns">Patterns</a></li>
-      <li><a href="#interview">Interview Q&A</a></li>
-    </ul>
+    <a href="#architecture">Architecture</a>
+    <a href="#flow">Execution Flow</a>
+    <a href="#structure">Structure</a>
+    <a href="#commands">Commands</a>
+    <a href="#patterns">Patterns</a>
+    <a href="#interview">Interview Q&A</a>
   </nav>
 
-  <main>
-    <h2 id="architecture">Framework Architecture</h2>
+  <section id="architecture">
+    <h2>Framework Architecture</h2>
+    <p>The framework follows a layered architecture pattern where each layer has specific responsibilities. Tests sit at the top and use fixtures to get page objects, which use helpers for common operations.</p>
 
-    <div class="diagram-section">
-      <div class="diagram-title">Layered Architecture</div>
+    <div class="diagram-container">
+      <div class="diagram-title">Layered Architecture Diagram</div>
+      <pre class="mermaid">
+flowchart TB
+    subgraph TestLayer["Test Layer"]
+        direction LR
+        UI["UI Tests<br/>tests/**/*.spec.ts"]
+        API["API Tests<br/>tests/api/*.spec.ts"]
+        A11Y["A11y Tests<br/>tests/accessibility/"]
+        PERF["Perf Tests<br/>tests/performance/"]
+        VIS["Visual Tests<br/>tests/visual/"]
+    end
 
-      <div class="arch-diagram">
-        <div class="arch-layer">
-          <span class="arch-layer-name">Test Layer</span>
-          <div class="arch-boxes">
-            <div class="arch-box"><strong>UI Tests</strong><span>Functional flows</span></div>
-            <div class="arch-box"><strong>API Tests</strong><span>Backend validation</span></div>
-            <div class="arch-box"><strong>A11y Tests</strong><span>WCAG compliance</span></div>
-            <div class="arch-box"><strong>Visual Tests</strong><span>Screenshot diff</span></div>
-            <div class="arch-box"><strong>Perf Tests</strong><span>Web Vitals</span></div>
-          </div>
-        </div>
+    subgraph FixtureLayer["Fixture Layer"]
+        direction LR
+        AUTH["Auth Fixture<br/>src/fixtures/auth.fixtures.ts"]
+        PAGE["Page Fixture<br/>src/fixtures/page.fixtures.ts"]
+    end
 
-        <div class="arch-arrow">↓</div>
+    subgraph PageObjectLayer["Page Object Layer"]
+        direction LR
+        BASE["BasePage<br/>src/pages/base.page.ts"]
+        LOGIN["LoginPage"]
+        DASH["DashboardPage"]
+        PIM["PIMPage"]
+        OTHER["...other pages"]
+    end
 
-        <div class="arch-layer">
-          <span class="arch-layer-name">Fixture Layer (Dependency Injection)</span>
-          <div class="arch-boxes">
-            <div class="arch-box"><strong>pageFixtures</strong><span>Injects page objects</span></div>
-            <div class="arch-box"><strong>authFixtures</strong><span>Handles login state</span></div>
-            <div class="arch-box"><strong>mergeTests</strong><span>Combines fixtures</span></div>
-          </div>
-        </div>
+    subgraph HelperLayer["Helper Layer"]
+        direction LR
+        A11YHELP["Accessibility<br/>src/helpers/accessibility.ts"]
+        PERFHELP["Performance<br/>src/helpers/performance.ts"]
+        RETRY["Retry<br/>src/helpers/retry.ts"]
+        DATA["Test Data<br/>src/helpers/test-data.ts"]
+    end
 
-        <div class="arch-arrow">↓</div>
+    subgraph ComponentLayer["Component Layer"]
+        direction LR
+        SIDEBAR["Sidebar"]
+        TABLE["Table"]
+        TOAST["Toast"]
+    end
 
-        <div class="arch-layer">
-          <span class="arch-layer-name">Page Object Layer</span>
-          <div class="arch-boxes">
-            <div class="arch-box"><strong>BasePage</strong><span>Common methods</span></div>
-            <div class="arch-box"><strong>LoginPage</strong><span>Auth actions</span></div>
-            <div class="arch-box"><strong>DashboardPage</strong><span>Dashboard actions</span></div>
-            <div class="arch-box"><strong>Components</strong><span>Sidebar, Table, Toast</span></div>
-          </div>
-        </div>
+    subgraph Core["Core"]
+        PW["Playwright Core"]
+    end
 
-        <div class="arch-arrow">↓</div>
+    TestLayer --> FixtureLayer
+    FixtureLayer --> PageObjectLayer
+    PageObjectLayer --> HelperLayer
+    PageObjectLayer --> ComponentLayer
+    HelperLayer --> Core
+    ComponentLayer --> Core
+    BASE --> LOGIN & DASH & PIM & OTHER
 
-        <div class="arch-layer">
-          <span class="arch-layer-name">Helper Layer</span>
-          <div class="arch-boxes">
-            <div class="arch-box"><strong>accessibility</strong><span>axe-core wrapper</span></div>
-            <div class="arch-box"><strong>performance</strong><span>Metrics collection</span></div>
-            <div class="arch-box"><strong>retry</strong><span>Backoff + circuit breaker</span></div>
-            <div class="arch-box"><strong>test-data</strong><span>Factory + cleanup</span></div>
-          </div>
-        </div>
+    style TestLayer fill:#238636,stroke:#3fb950,color:#fff
+    style FixtureLayer fill:#1f6feb,stroke:#58a6ff,color:#fff
+    style PageObjectLayer fill:#8957e5,stroke:#a371f7,color:#fff
+    style HelperLayer fill:#d29922,stroke:#f0b72f,color:#000
+    style ComponentLayer fill:#bf3989,stroke:#db61a2,color:#fff
+    style Core fill:#21262d,stroke:#30363d,color:#fff
+      </pre>
+    </div>
+  </section>
 
-        <div class="arch-arrow">↓</div>
+  <section id="flow">
+    <h2>Test Execution Flow</h2>
+    <p>When you run <code>npx playwright test</code>, this is the sequence of events that occurs. Understanding this flow is crucial for debugging and interview discussions.</p>
 
-        <div class="arch-layer">
-          <span class="arch-layer-name">Infrastructure Layer</span>
-          <div class="arch-boxes">
-            <div class="arch-box"><strong>Config</strong><span>playwright.config.ts</span></div>
-            <div class="arch-box"><strong>Environment</strong><span>.env.* files</span></div>
-            <div class="arch-box"><strong>Reporters</strong><span>HTML, Allure, Custom</span></div>
-            <div class="arch-box"><strong>CI/CD</strong><span>GitHub Actions</span></div>
-          </div>
-        </div>
-      </div>
+    <div class="diagram-container">
+      <div class="diagram-title">Test Execution Sequence Diagram</div>
+      <pre class="mermaid">
+sequenceDiagram
+    participant Dev as Developer
+    participant PW as Playwright
+    participant GS as Global Setup
+    participant FIX as Fixtures
+    participant PO as Page Objects
+    participant APP as OrangeHRM App
+
+    Dev->>PW: npx playwright test
+    PW->>PW: Load playwright.config.ts
+    PW->>GS: Run global-setup.ts
+    GS->>APP: Login as Admin
+    APP-->>GS: Return session cookies
+    GS->>GS: Save to auth/admin.json
+    GS-->>PW: Setup complete
+
+    loop For each test file (parallel)
+        PW->>FIX: Initialize fixtures
+        FIX->>FIX: Load auth state from JSON
+        FIX->>PO: Create page objects
+        PO-->>FIX: Return loginPage, dashboardPage, etc.
+        FIX-->>PW: Inject fixtures into test
+
+        PW->>PO: test calls page.navigate()
+        PO->>APP: Navigate to page
+        APP-->>PO: Page loaded
+
+        PO->>APP: Perform actions (click, fill, etc.)
+        APP-->>PO: Return results
+
+        PW->>PW: Run assertions
+        PW->>PW: Capture screenshots/traces on failure
+    end
+
+    PW->>PW: Generate reports (HTML, Allure, JUnit)
+    PW-->>Dev: Show results
+      </pre>
     </div>
 
-    <h2 id="flow">Test Execution Flow</h2>
+    <div class="diagram-container">
+      <div class="diagram-title">Fixture Dependency Injection Flow</div>
+      <pre class="mermaid">
+flowchart LR
+    subgraph Test["Test File"]
+        T["test('login works', async ({ loginPage }) => { })"]
+    end
 
-    <div class="diagram-section">
-      <div class="diagram-title">What Happens When You Run <code>npm test</code></div>
+    subgraph Fixtures["Fixture System"]
+        PF["pageFixtures"]
+        AF["authFixtures"]
+        MT["mergeTests()"]
+    end
 
-      <div class="flow-diagram">
-        <div class="flow-step">
-          <div class="flow-icon config">⚙️</div>
-          <div class="flow-label">1. Config</div>
-          <div class="flow-desc">Load playwright.config.ts</div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-icon setup">🔐</div>
-          <div class="flow-label">2. Setup</div>
-          <div class="flow-desc">Run global-setup.ts once</div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-icon fixture">💉</div>
-          <div class="flow-label">3. Fixtures</div>
-          <div class="flow-desc">Inject page objects</div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-icon test">🧪</div>
-          <div class="flow-label">4. Tests</div>
-          <div class="flow-desc">Execute in parallel</div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-icon report">📊</div>
-          <div class="flow-label">5. Report</div>
-          <div class="flow-desc">Generate HTML + Allure</div>
-        </div>
-      </div>
+    subgraph PageObjects["Page Objects"]
+        LP["LoginPage"]
+        DP["DashboardPage"]
+        PP["PIMPage"]
+    end
+
+    subgraph Browser["Browser Context"]
+        PAGE["page"]
+        CTX["context"]
+        REQ["request"]
+    end
+
+    Test -->|imports| MT
+    MT -->|combines| PF & AF
+    PF -->|creates| LP & DP & PP
+    AF -->|provides auth state| CTX
+    Browser -->|injected by Playwright| PF
+
+    style Test fill:#238636,stroke:#3fb950,color:#fff
+    style Fixtures fill:#1f6feb,stroke:#58a6ff,color:#fff
+    style PageObjects fill:#8957e5,stroke:#a371f7,color:#fff
+    style Browser fill:#21262d,stroke:#30363d,color:#fff
+      </pre>
     </div>
+  </section>
 
-    <h3>Flow Explained</h3>
-
-    <pre><code><span class="code-comment">// Step 1: Config loads and determines:</span>
-<span class="code-comment">// - Which tests to run (testDir, testMatch)</span>
-<span class="code-comment">// - How many parallel workers (workers: 4)</span>
-<span class="code-comment">// - Which browsers (projects: chromium, firefox, webkit)</span>
-
-<span class="code-comment">// Step 2: Global setup runs ONCE before all tests</span>
-<span class="code-keyword">async function</span> <span class="code-function">globalSetup</span>() {
-  <span class="code-comment">// Login and save session to auth/admin.json</span>
-  <span class="code-comment">// All tests reuse this - no repeated logins!</span>
-}
-
-<span class="code-comment">// Step 3: Fixtures inject dependencies</span>
-<span class="code-keyword">test</span>(<span class="code-string">'dashboard test'</span>, <span class="code-keyword">async</span> ({ <span class="code-function">loginPage</span>, <span class="code-function">dashboardPage</span> }) => {
-  <span class="code-comment">// loginPage and dashboardPage are auto-created!</span>
-});
-
-<span class="code-comment">// Step 4: Tests run in parallel, isolated browser contexts</span>
-<span class="code-comment">// Step 5: Reports generated from all results</span></code></pre>
-
-    <h2 id="structure">Directory Structure</h2>
+  <section id="structure">
+    <h2>Directory Structure</h2>
 
     <div class="tree">
-<span class="f">playwright-enterprise-framework/</span>
-├── <span class="f">src/</span>                          <span class="d"># Reusable code (not tests)</span>
-│   ├── <span class="f">pages/</span>                    <span class="d"># Page Object Model classes</span>
-│   │   ├── base.page.ts          <span class="d"># Base class - common methods</span>
-│   │   ├── login.page.ts         <span class="d"># Login page actions</span>
-│   │   ├── dashboard.page.ts     <span class="d"># Dashboard page actions</span>
-│   │   ├── <span class="f">pim/</span>                  <span class="d"># PIM module pages</span>
-│   │   └── <span class="f">components/</span>           <span class="d"># Reusable components</span>
+<span class="folder">playwright-enterprise-framework/</span>
+├── <span class="folder">src/</span>                              <span class="desc"># Source code (reusable)</span>
+│   ├── <span class="folder">pages/</span>                        <span class="desc"># Page Object Model</span>
+│   │   ├── base.page.ts              <span class="desc"># Base class with common methods</span>
+│   │   ├── login.page.ts             <span class="desc"># Login page locators & actions</span>
+│   │   ├── dashboard.page.ts         <span class="desc"># Dashboard page</span>
+│   │   ├── <span class="folder">pim/</span>                      <span class="desc"># PIM module pages</span>
+│   │   │   ├── pim.page.ts
+│   │   │   └── add-employee.page.ts
+│   │   └── <span class="folder">components/</span>               <span class="desc"># Reusable UI components</span>
 │   │       ├── sidebar.component.ts
 │   │       ├── table.component.ts
 │   │       └── toast.component.ts
-│   ├── <span class="f">fixtures/</span>                 <span class="d"># Dependency injection</span>
-│   │   ├── page.fixtures.ts      <span class="d"># Creates page objects</span>
-│   │   ├── auth.fixtures.ts      <span class="d"># Handles auth state</span>
-│   │   └── index.ts              <span class="d"># Exports merged test</span>
-│   ├── <span class="f">helpers/</span>                  <span class="d"># Utility modules</span>
-│   │   ├── accessibility.ts      <span class="d"># axe-core integration</span>
-│   │   ├── performance.ts        <span class="d"># Web Vitals collection</span>
-│   │   ├── retry.ts              <span class="d"># Exponential backoff</span>
-│   │   ├── test-data.ts          <span class="d"># Data factory</span>
-│   │   ├── allure-steps.ts       <span class="d"># Step annotations</span>
-│   │   └── custom-matchers.ts    <span class="d"># Soft assertions</span>
-│   ├── <span class="f">api/</span>                      <span class="d"># API client</span>
-│   ├── <span class="f">config/</span>                   <span class="d"># Environment config</span>
-│   ├── <span class="f">reporters/</span>                <span class="d"># Custom reporters</span>
-│   └── <span class="f">types/</span>                    <span class="d"># TypeScript interfaces</span>
-├── <span class="f">tests/</span>                        <span class="d"># All test specs</span>
-│   ├── <span class="f">ui/</span>                       <span class="d"># UI functional tests</span>
-│   ├── <span class="f">api/</span>                      <span class="d"># API tests</span>
-│   ├── <span class="f">accessibility/</span>            <span class="d"># WCAG tests</span>
-│   ├── <span class="f">performance/</span>              <span class="d"># Web Vitals tests</span>
-│   ├── <span class="f">visual/</span>                   <span class="d"># Screenshot tests</span>
-│   ├── <span class="f">data-driven/</span>              <span class="d"># Parameterized tests</span>
-│   ├── <span class="f">mocking/</span>                  <span class="d"># Network mocking</span>
-│   └── <span class="f">advanced/</span>                 <span class="d"># Complex patterns</span>
-├── playwright.config.ts          <span class="d"># Central configuration</span>
-├── global-setup.ts               <span class="d"># Pre-test setup</span>
+│   ├── <span class="folder">fixtures/</span>                     <span class="desc"># Dependency Injection</span>
+│   │   ├── page.fixtures.ts          <span class="desc"># Creates page objects</span>
+│   │   ├── auth.fixtures.ts          <span class="desc"># Handles auth state</span>
+│   │   └── index.ts                  <span class="desc"># Exports merged test</span>
+│   ├── <span class="folder">helpers/</span>                      <span class="desc"># Utility functions</span>
+│   │   ├── accessibility.ts          <span class="desc"># axe-core WCAG testing</span>
+│   │   ├── performance.ts            <span class="desc"># Web Vitals collection</span>
+│   │   ├── retry.ts                  <span class="desc"># Retry with backoff</span>
+│   │   ├── test-data.ts              <span class="desc"># Faker.js data factory</span>
+│   │   └── allure-steps.ts           <span class="desc"># Step annotations</span>
+│   ├── <span class="folder">api/</span>                          <span class="desc"># API client</span>
+│   ├── <span class="folder">config/</span>                       <span class="desc"># Environment config loader</span>
+│   ├── <span class="folder">reporters/</span>                    <span class="desc"># Custom reporters</span>
+│   └── <span class="folder">types/</span>                        <span class="desc"># TypeScript interfaces</span>
+├── <span class="folder">tests/</span>                            <span class="desc"># All test specs</span>
+│   ├── <span class="folder">ui/</span>                           <span class="desc"># UI functional tests</span>
+│   │   ├── <span class="folder">auth/</span>login.spec.ts
+│   │   ├── <span class="folder">dashboard/</span>dashboard.spec.ts
+│   │   └── <span class="folder">pim/</span>employee.spec.ts
+│   ├── <span class="folder">api/</span>                          <span class="desc"># API tests (no browser)</span>
+│   ├── <span class="folder">accessibility/</span>                <span class="desc"># WCAG compliance</span>
+│   ├── <span class="folder">performance/</span>                  <span class="desc"># Web Vitals tests</span>
+│   ├── <span class="folder">visual/</span>                       <span class="desc"># Screenshot comparison</span>
+│   ├── <span class="folder">data-driven/</span>                  <span class="desc"># Parameterized tests</span>
+│   ├── <span class="folder">mocking/</span>                      <span class="desc"># Network mocking</span>
+│   └── <span class="folder">advanced/</span>                     <span class="desc"># Multi-tab, iframes, etc.</span>
+├── playwright.config.ts              <span class="desc"># Central configuration</span>
+├── global-setup.ts                   <span class="desc"># Runs once before all tests</span>
 ├── .env.dev / .env.staging / .env.prod
-└── <span class="f">.github/workflows/</span>           <span class="d"># CI/CD pipeline</span>
+└── <span class="folder">.github/workflows/</span>               <span class="desc"># CI/CD pipeline</span>
     </div>
+  </section>
 
-    <h2 id="commands">Running Tests</h2>
+  <section id="commands">
+    <h2>Running Tests</h2>
 
-    <h3>Setup (First Time Only)</h3>
+    <h3>Setup (First Time)</h3>
     <div class="cmd"><span class="cmd-prefix">$</span> npm install</div>
     <div class="cmd"><span class="cmd-prefix">$</span> npx playwright install</div>
 
     <h3>Test Commands</h3>
     <table>
-      <tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr>
+      <tr><th>Command</th><th>Description</th><th>Use Case</th></tr>
       <tr><td><code>npm test</code></td><td>Run all tests</td><td>Full regression</td></tr>
-      <tr><td><code>npm run test:smoke</code></td><td>Quick critical tests</td><td>Fast feedback</td></tr>
-      <tr><td><code>npm run test:ui</code></td><td>Visual test runner</td><td>Learning/debugging</td></tr>
-      <tr><td><code>npm run test:headed</code></td><td>Watch browser</td><td>See what's happening</td></tr>
-      <tr><td><code>npm run test:debug</code></td><td>Debug mode</td><td>Step through code</td></tr>
-      <tr><td><code>npm run test:a11y</code></td><td>Accessibility tests</td><td>WCAG compliance</td></tr>
-      <tr><td><code>npm run test:performance</code></td><td>Web Vitals</td><td>Performance audit</td></tr>
-      <tr><td><code>npm run test:visual</code></td><td>Screenshot comparison</td><td>Visual regression</td></tr>
+      <tr><td><code>npm run test:smoke</code></td><td>Run @smoke tagged tests</td><td>Quick sanity check</td></tr>
+      <tr><td><code>npm run test:ui</code></td><td>Open Playwright UI mode</td><td>Visual debugging</td></tr>
+      <tr><td><code>npm run test:headed</code></td><td>Run with visible browser</td><td>Watch execution</td></tr>
+      <tr><td><code>npm run test:debug</code></td><td>Debug mode with inspector</td><td>Step through code</td></tr>
+      <tr><td><code>npm run test:a11y</code></td><td>Accessibility tests only</td><td>WCAG audit</td></tr>
+      <tr><td><code>npm run test:performance</code></td><td>Performance tests</td><td>Web Vitals check</td></tr>
+      <tr><td><code>npm run test:visual</code></td><td>Visual regression</td><td>Screenshot diff</td></tr>
       <tr><td><code>npm run report</code></td><td>Open HTML report</td><td>View results</td></tr>
+      <tr><td><code>npm run report:allure</code></td><td>Generate Allure report</td><td>Rich reporting</td></tr>
     </table>
 
     <div class="tip">
-      <div class="tip-label">Start Here</div>
-      <p>Run <code>npm run test:ui</code> to open Playwright's visual test runner. You can see all tests, run them individually, and watch the browser execute each step. This is the best way to understand how the framework works.</p>
+      <div class="tip-label">Best Way to Learn</div>
+      <p>Run <code>npm run test:ui</code> to open the visual test runner. You can browse all tests, run them individually, and watch the browser in real-time. This is the fastest way to understand how the framework works.</p>
     </div>
+  </section>
 
-    <h2 id="patterns">Key Patterns</h2>
+  <section id="patterns">
+    <h2>Key Patterns</h2>
 
-    <div class="card-grid">
-      <div class="feature-card">
-        <div class="feature-icon">📄</div>
-        <h4>Page Object Model</h4>
-        <p>Each page has a class with locators and actions. Changes to UI only need updates in one place.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon purple">📄</div>
+          <h4>Page Object Model</h4>
+        </div>
+        <p>Encapsulate locators and actions in classes. If UI changes, update one file instead of every test.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">💉</div>
-        <h4>Fixtures (DI)</h4>
-        <p>Playwright auto-creates and injects page objects. Tests stay clean and focused.</p>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon blue">💉</div>
+          <h4>Fixtures (DI)</h4>
+        </div>
+        <p>Playwright creates and injects page objects automatically. Tests stay clean and focused.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h4>Data-Driven</h4>
-        <p>Same test logic runs with different data sets. Maximum coverage, minimal code.</p>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon green">📊</div>
+          <h4>Data-Driven Testing</h4>
+        </div>
+        <p>Same test logic runs with different data sets. Maximum coverage with minimal code.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">♿</div>
-        <h4>Accessibility</h4>
-        <p>axe-core tests WCAG 2.1 AA compliance. Catch issues before they reach production.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h4>Performance</h4>
-        <p>Collect Core Web Vitals (LCP, FCP, CLS). Ensure fast user experience.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔄</div>
-        <h4>Retry + Circuit Breaker</h4>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon orange">🔄</div>
+          <h4>Retry + Circuit Breaker</h4>
+        </div>
         <p>Exponential backoff for flaky operations. Circuit breaker prevents cascade failures.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">🖼️</div>
-        <h4>Visual Testing</h4>
-        <p>Screenshot comparison catches CSS bugs. Per-browser baselines handle rendering differences.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🌐</div>
-        <h4>Network Mocking</h4>
-        <p>Intercept API calls and return fake data. Test edge cases without backend changes.</p>
+    </div>
+
+    <div class="diagram-container">
+      <div class="diagram-title">Page Object Pattern</div>
+      <pre class="mermaid">
+classDiagram
+    class BasePage {
+        #page: Page
+        +waitForPageLoad()
+        +takeScreenshot()
+    }
+
+    class LoginPage {
+        -usernameInput: Locator
+        -passwordInput: Locator
+        -submitButton: Locator
+        +navigate()
+        +login(credentials)
+        +getErrorMessage()
+    }
+
+    class DashboardPage {
+        +sidebar: SidebarComponent
+        +table: TableComponent
+        +navigate()
+        +getWidgets()
+    }
+
+    class SidebarComponent {
+        -menuItems: Locator
+        +navigateTo(section)
+        +collapse()
+        +expand()
+    }
+
+    BasePage <|-- LoginPage
+    BasePage <|-- DashboardPage
+    DashboardPage *-- SidebarComponent
+      </pre>
+    </div>
+  </section>
+
+  <section id="interview">
+    <h2>Interview Q&A</h2>
+
+    <div class="qa">
+      <div class="qa-q">Q: Explain your framework architecture</div>
+      <div class="qa-a">
+        <strong>"It's a 5-layer architecture:</strong> (1) <strong>Test Layer</strong> - specs organized by type (UI, API, a11y, visual), (2) <strong>Fixture Layer</strong> - dependency injection for page objects, (3) <strong>Page Object Layer</strong> - encapsulates UI elements and actions, (4) <strong>Helper Layer</strong> - utilities like retry, accessibility, performance, (5) <strong>Core</strong> - Playwright engine. Each layer only communicates with adjacent layers, making it maintainable and testable."
       </div>
     </div>
 
-    <h3>Code Example: How Fixtures Work</h3>
-    <pre><code><span class="code-comment">// src/fixtures/page.fixtures.ts</span>
-<span class="code-keyword">export const</span> pageFixtures = base.extend&lt;PageFixtures&gt;({
-  <span class="code-function">loginPage</span>: <span class="code-keyword">async</span> ({ page }, use) => {
-    <span class="code-keyword">const</span> loginPage = <span class="code-keyword">new</span> <span class="code-function">LoginPage</span>(page);
-    <span class="code-keyword">await</span> <span class="code-function">use</span>(loginPage);  <span class="code-comment">// Inject into test</span>
-  },
-});
-
-<span class="code-comment">// In your test file:</span>
-<span class="code-keyword">import</span> { test, expect } <span class="code-keyword">from</span> <span class="code-string">'../../src/fixtures'</span>;
-
-<span class="code-function">test</span>(<span class="code-string">'login works'</span>, <span class="code-keyword">async</span> ({ <span class="code-function">loginPage</span> }) => {
-  <span class="code-comment">// loginPage is automatically injected!</span>
-  <span class="code-keyword">await</span> loginPage.<span class="code-function">navigate</span>();
-  <span class="code-keyword">await</span> loginPage.<span class="code-function">login</span>({ username: <span class="code-string">'Admin'</span>, password: <span class="code-string">'admin123'</span> });
-});</code></pre>
-
-    <h2 id="interview">Interview Q&A</h2>
-
-    <div class="qa-card">
-      <div class="qa-question">Explain your framework architecture</div>
-      <div class="qa-answer">
-        <strong>"It's a 5-layer modular architecture:</strong> (1) Test Layer - organized by type (UI, API, a11y, visual), (2) Fixture Layer - dependency injection for page objects, (3) Page Object Layer - encapsulates UI elements and actions, (4) Helper Layer - utilities like retry, accessibility, performance, (5) Infrastructure - config, reporters, CI/CD. This separation makes tests maintainable and scalable."
+    <div class="qa">
+      <div class="qa-q">Q: Why use Page Object Model?</div>
+      <div class="qa-a">
+        <strong>"Three reasons:</strong> (1) <strong>Maintainability</strong> - if a locator changes, I update one file, not 50 tests. (2) <strong>Readability</strong> - tests read like user actions: <code>loginPage.login()</code> not <code>page.fill().click()</code>. (3) <strong>Reusability</strong> - the same login method works across all tests without duplication."
       </div>
     </div>
 
-    <div class="qa-card">
-      <div class="qa-question">Why use Page Object Model?</div>
-      <div class="qa-answer">
-        <strong>"Three reasons:</strong> (1) <strong>Maintainability</strong> - if a locator changes, I update one file, not 50 tests. (2) <strong>Readability</strong> - tests read like user actions: <code>loginPage.login()</code> not <code>page.fill().click()</code>. (3) <strong>Reusability</strong> - the same login method works across all tests."
+    <div class="qa">
+      <div class="qa-q">Q: What are Playwright fixtures and why use them?</div>
+      <div class="qa-a">
+        <strong>"Fixtures are Playwright's dependency injection system.</strong> Instead of creating page objects manually in each test, fixtures create them once and inject them automatically. Benefits: (1) Proper setup/teardown lifecycle, (2) Test isolation - each test gets fresh instances, (3) Parallel execution without conflicts, (4) Clean test code without boilerplate."
       </div>
     </div>
 
-    <div class="qa-card">
-      <div class="qa-question">What are Playwright fixtures?</div>
-      <div class="qa-answer">
-        <strong>"Fixtures are Playwright's dependency injection system.</strong> Instead of creating page objects manually in every test, fixtures create them once and inject them automatically. This ensures proper setup/teardown lifecycle, enables parallel execution with isolation, and keeps tests clean."
+    <div class="qa">
+      <div class="qa-q">Q: How do you handle flaky tests?</div>
+      <div class="qa-a">
+        <strong>"Multiple strategies:</strong> (1) <strong>Auto-retries</strong> with exponential backoff - wait 1s, 2s, 4s between attempts. (2) <strong>Proper waits</strong> - use Playwright's auto-waiting instead of sleep(). (3) <strong>Circuit breaker</strong> - stop retrying after threshold to fail fast. (4) <strong>@flaky tag</strong> - exclude from CI while investigating root cause. (5) <strong>Trace on failure</strong> - capture video, screenshots, network for debugging."
       </div>
     </div>
 
-    <div class="qa-card">
-      <div class="qa-question">How do you handle flaky tests?</div>
-      <div class="qa-answer">
-        <strong>"Three strategies:</strong> (1) Built-in retries with exponential backoff - wait longer between each attempt. (2) Proper waits using Playwright's auto-waiting instead of arbitrary sleeps. (3) Circuit breaker pattern that stops retrying after a threshold to prevent cascade failures. I also tag flaky tests with @flaky to exclude from CI while investigating."
+    <div class="qa">
+      <div class="qa-q">Q: How do you run tests in parallel?</div>
+      <div class="qa-a">
+        <strong>"Playwright supports parallelism at multiple levels:</strong> (1) <code>fullyParallel: true</code> runs test files AND tests within files in parallel. (2) <code>workers: 4</code> sets concurrent browser instances. (3) In CI, <strong>sharding</strong>: <code>--shard=1/4</code> splits tests across 4 machines. Each test gets an isolated browser context with its own cookies/localStorage, so they can't interfere."
       </div>
     </div>
 
-    <div class="qa-card">
-      <div class="qa-question">How do you run tests in parallel?</div>
-      <div class="qa-answer">
-        <strong>"Playwright supports parallelism at multiple levels:</strong> (1) <code>fullyParallel: true</code> runs test files AND tests within files in parallel. (2) In CI, I use sharding: <code>--shard=1/4</code> splits tests across 4 machines. Each test gets an isolated browser context with its own cookies/storage, so they can't interfere with each other."
+    <div class="qa">
+      <div class="qa-q">Q: How do you test accessibility?</div>
+      <div class="qa-a">
+        <strong>"I integrate axe-core for automated WCAG testing.</strong> It checks 50+ rules including color contrast (4.5:1 ratio), missing alt text, keyboard navigation, ARIA roles. I run <code>await axeBuilder.analyze()</code> and assert no violations. CI fails on critical/serious issues; moderate ones are logged as warnings. Reports show exactly which elements fail and how to fix them."
       </div>
     </div>
 
-    <div class="qa-card">
-      <div class="qa-question">How do you test accessibility?</div>
-      <div class="qa-answer">
-        <strong>"I integrate axe-core which tests against WCAG 2.1 AA automatically.</strong> It checks 50+ rules including color contrast (4.5:1 ratio), missing alt text, keyboard navigation, and ARIA roles. I fail CI on critical/serious issues but log moderate ones as warnings. The helper generates detailed reports showing which elements have issues and how to fix them."
+    <div class="qa">
+      <div class="qa-q">Q: Explain your CI/CD pipeline</div>
+      <div class="qa-a">
+        <strong>"Progressive testing in GitHub Actions:</strong> (1) <strong>PR</strong> - smoke tests on Chromium only (&lt;5 min feedback). (2) <strong>Merge to main</strong> - full regression across Chrome/Firefox/Safari with 4-way sharding. (3) <strong>Nightly</strong> - accessibility, performance, visual tests. Reports are merged from shards using <code>playwright merge-reports</code> and deployed to GitHub Pages for team visibility."
       </div>
     </div>
 
-    <div class="qa-card">
-      <div class="qa-question">Explain your CI/CD pipeline</div>
-      <div class="qa-answer">
-        <strong>"GitHub Actions with progressive testing:</strong> (1) PR trigger runs smoke tests on Chromium only for fast feedback (&lt;5 min). (2) Merge to main runs full regression across Chrome/Firefox/Safari with 4-way sharding. (3) Nightly schedule runs accessibility, performance, and visual tests. Reports are merged from shards and deployed to GitHub Pages."
+    <div class="qa">
+      <div class="qa-q">Q: How do you handle test data?</div>
+      <div class="qa-a">
+        <strong>"Three-pronged approach:</strong> (1) <strong>Factory pattern</strong> with Faker.js generates unique data each run - no collisions. (2) <strong>API seeding</strong> creates data via backend before UI tests - faster than UI setup. (3) <strong>Cleanup in afterAll</strong> removes test data to prevent pollution. Each test creates its own data for isolation - I never depend on existing database state."
       </div>
     </div>
 
-    <div class="qa-card">
-      <div class="qa-question">How do you handle multiple environments?</div>
-      <div class="qa-answer">
-        <strong>"Environment config is externalized in .env files</strong> - .env.dev, .env.staging, .env.prod. The environment.ts helper loads the right one based on the ENV variable. URLs, timeouts, retry counts, and feature flags differ per environment. I run tests with <code>ENV=staging npm test</code>."
-      </div>
-    </div>
-
-    <h3>Study These Files</h3>
+    <h3>Files to Study</h3>
     <table>
-      <tr><th>Topic</th><th>File to Read</th></tr>
+      <tr><th>Topic</th><th>File</th></tr>
       <tr><td>Page Objects</td><td><code>src/pages/login.page.ts</code></td></tr>
       <tr><td>Fixtures</td><td><code>src/fixtures/index.ts</code></td></tr>
       <tr><td>Data-Driven</td><td><code>tests/data-driven/parameterized.spec.ts</code></td></tr>
       <tr><td>Accessibility</td><td><code>src/helpers/accessibility.ts</code></td></tr>
       <tr><td>Performance</td><td><code>src/helpers/performance.ts</code></td></tr>
+      <tr><td>Retry Logic</td><td><code>src/helpers/retry.ts</code></td></tr>
       <tr><td>Multi-Tab</td><td><code>tests/advanced/multi-tab-window.spec.ts</code></td></tr>
       <tr><td>CI/CD</td><td><code>.github/workflows/playwright.yml</code></td></tr>
     </table>
-
-    <div class="tip">
-      <div class="tip-label">How to Learn This Framework</div>
-      <ol>
-        <li><strong>Run <code>npm run test:ui</code></strong> - explore each test visually</li>
-        <li><strong>Read one file from each layer</strong> - understand the architecture</li>
-        <li><strong>Modify a test and break it</strong> - learn by debugging</li>
-        <li><strong>Practice explaining each pattern out loud</strong> - prep for interviews</li>
-      </ol>
-    </div>
-
-  </main>
+  </section>
 </div>
