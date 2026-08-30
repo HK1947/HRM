@@ -13,7 +13,7 @@
 import { test, expect } from '@playwright/test';
 import { logTestStart, logTestEnd } from '../../src/helpers';
 
-test.describe('iFrame Handling @iframe @regression', () => {
+test.describe('iFrame Handling @iframe @external', () => {
 
     test.describe('Basic iFrame Interactions', () => {
 

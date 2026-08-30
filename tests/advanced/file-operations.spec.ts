@@ -15,7 +15,7 @@ import { logTestStart, logTestEnd } from '../../src/helpers';
 import * as fs from 'fs';
 import * as path from 'path';
 
-test.describe('File Operations @file-ops @regression', () => {
+test.describe('File Operations @file-ops @external', () => {
 
     const testFilesDir = path.join(process.cwd(), 'test-data');
 

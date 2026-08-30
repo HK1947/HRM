@@ -24,7 +24,7 @@ const locations = {
     amsterdam: { latitude: 52.3676, longitude: 4.9041, timezone: 'Europe/Amsterdam' },
 };
 
-test.describe('Geolocation Mocking @geolocation @regression', () => {
+test.describe('Geolocation Mocking @geolocation @external', () => {
 
     test.describe('Basic Geolocation', () => {
 
@@ -171,7 +171,7 @@ test.describe('Geolocation Mocking @geolocation @regression', () => {
     });
 });
 
-test.describe('Timezone Mocking @timezone @regression', () => {
+test.describe('Timezone Mocking @timezone @external', () => {
 
     test.describe('Basic Timezone', () => {
 
@@ -355,7 +355,7 @@ test.describe('Timezone Mocking @timezone @regression', () => {
     });
 });
 
-test.describe('Locale Mocking @locale @regression', () => {
+test.describe('Locale Mocking @locale @external', () => {
 
     test('should mock browser locale', async ({ browser }) => {
         logTestStart('Mock locale');

@@ -135,7 +135,8 @@ export default defineConfig({
         },
 
         /**
-         * Desktop browsers
+         * Desktop browser - Chromium only for default runs
+         * INTERVIEW TIP: "Run on one browser locally, cross-browser in CI"
          */
         {
             name: 'chromium',
@@ -145,53 +146,59 @@ export default defineConfig({
             },
             dependencies: ['setup'],
         },
-        {
-            name: 'firefox',
-            use: {
-                ...devices['Desktop Firefox'],
-                storageState: 'auth/admin.json',
-            },
-            dependencies: ['setup'],
-        },
-        {
-            name: 'webkit',
-            use: {
-                ...devices['Desktop Safari'],
-                storageState: 'auth/admin.json',
-            },
-            dependencies: ['setup'],
-        },
 
         /**
-         * Mobile emulation
+         * Cross-browser testing - uncomment for CI or manual cross-browser runs
+         * Run with: npx playwright test --project=firefox --project=webkit
+         */
+        // {
+        //     name: 'firefox',
+        //     use: {
+        //         ...devices['Desktop Firefox'],
+        //         storageState: 'auth/admin.json',
+        //     },
+        //     dependencies: ['setup'],
+        // },
+        // {
+        //     name: 'webkit',
+        //     use: {
+        //         ...devices['Desktop Safari'],
+        //         storageState: 'auth/admin.json',
+        //     },
+        //     dependencies: ['setup'],
+        // },
+
+        /**
+         * Mobile emulation - uncomment for responsive testing
+         * Run with: npx playwright test --project=mobile-chrome
          *
          * INTERVIEW TIP: "Mobile projects emulate viewport, user agent,
          * and touch events - not actual mobile browsers"
          */
-        {
-            name: 'mobile-chrome',
-            use: {
-                ...devices['Pixel 5'],
-                storageState: 'auth/admin.json',
-            },
-            dependencies: ['setup'],
-        },
-        {
-            name: 'mobile-safari',
-            use: {
-                ...devices['iPhone 12'],
-                storageState: 'auth/admin.json',
-            },
-            dependencies: ['setup'],
-        },
-        {
-            name: 'tablet',
-            use: {
-                ...devices['iPad Pro 11'],
-                storageState: 'auth/admin.json',
-            },
-            dependencies: ['setup'],
-        },
+        // {
+        //     name: 'mobile-chrome',
+        //     use: {
+        //         ...devices['Pixel 5'],
+        //         storageState: 'auth/admin.json',
+        //     },
+        //     dependencies: ['setup'],
+        // },
+        // {
+        //     name: 'mobile-safari',
+        //     use: {
+        //         ...devices['iPhone 12'],
+        //         storageState: 'auth/admin.json',
+        //     },
+        //     dependencies: ['setup'],
+        // },
+        // {
+        //     name: 'tablet',
+        //     use: {
+        //         ...devices['iPad Pro 11'],
+        //         storageState: 'auth/admin.json',
+        //     },
+        //     dependencies: ['setup'],
+        // },
 
         /**
          * API-only tests (no browser needed)

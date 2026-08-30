@@ -13,7 +13,7 @@
 import { test, expect, Page } from '@playwright/test';
 import { logTestStart, logTestEnd } from '../../src/helpers';
 
-test.describe('Multiple Tabs & Windows @multi-tab @regression', () => {
+test.describe('Multiple Tabs & Windows @multi-tab @external', () => {
 
     test.describe('New Tab Handling', () => {
 
