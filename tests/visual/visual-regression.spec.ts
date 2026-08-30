@@ -27,7 +27,7 @@ function getSnapshotName(baseName: string, browserName: string): string {
     return `${browserName}/${baseName}`;
 }
 
-test.describe('Visual Regression Tests @visual @regression', () => {
+test.describe('Visual Regression Tests @visual', () => {
 
     test.describe('Login Page Visuals', () => {
 

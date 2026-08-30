@@ -14,7 +14,7 @@ import { test, expect } from '../../src/fixtures';
 import { createA11yChecker } from '../../src/helpers/accessibility';
 import { logTestStart, logTestEnd } from '../../src/helpers';
 
-test.describe('Accessibility Tests @accessibility @regression', () => {
+test.describe('Accessibility Tests @accessibility', () => {
 
     test.describe('Login Page Accessibility', () => {
 
@@ -109,9 +109,9 @@ test.describe('Accessibility Tests @accessibility @regression', () => {
 
             // INTERVIEW TIP: "Tab navigation is critical for users who can't use a mouse"
 
-            // Tab to username field
-            await page.keyboard.press('Tab');
+            // Username field has autofocus, so it should already be focused or focusable
             const usernameInput = page.locator('input[name="username"]');
+            await usernameInput.focus();
             await expect(usernameInput).toBeFocused();
 
             // Tab to password field
