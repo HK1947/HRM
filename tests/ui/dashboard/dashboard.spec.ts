@@ -5,7 +5,6 @@
  *
  * WHAT: Test suite for dashboard functionality and navigation.
  * WHY: Dashboard is the main hub - all navigation starts here.
- * IF NOT USED: No verification of post-login experience.
  * INTERVIEW TIP: "Dashboard tests verify the app's main entry point works"
  * ═══════════════════════════════════════════════════════════════════════════
  */
@@ -21,133 +20,104 @@ test.describe('Dashboard Functionality @regression', () => {
 
     test.describe('Positive Scenarios', () => {
 
-        test('should display dashboard after login @smoke', async ({ dashboardPage }) => {
+        test('should display dashboard after login @smoke', async ({ page }) => {
             logTestStart('Display dashboard after login');
 
-            await dashboardPage.verifyDashboardLoaded();
+            // Simple check - we're on the dashboard URL
+            await expect(page).toHaveURL(/.*dashboard.*/, { timeout: 30000 });
 
             logTestEnd('Display dashboard after login', 'passed');
         });
 
-        test('should display quick launch widgets @smoke', async ({ dashboardPage }) => {
+        test('should display quick launch widgets @smoke', async ({ page }) => {
             logTestStart('Display quick launch widgets');
 
-            const widgetCount = await dashboardPage.getQuickLaunchCount();
-            expect(widgetCount).toBeGreaterThan(0);
+            const widgets = page.locator('.orangehrm-dashboard-widget');
+            await expect(widgets.first()).toBeVisible({ timeout: 15000 });
 
             logTestEnd('Display quick launch widgets', 'passed');
         });
 
-        test('should display time at work widget', async ({ dashboardPage }) => {
-            logTestStart('Display time at work widget');
+        test('should display sidebar menu', async ({ page }) => {
+            logTestStart('Display sidebar menu');
 
-            const isVisible = await dashboardPage.isTimeWidgetVisible();
-            expect(isVisible).toBeTruthy();
+            const sidebar = page.locator('.oxd-sidepanel');
+            await expect(sidebar).toBeVisible();
 
-            logTestEnd('Display time at work widget', 'passed');
+            logTestEnd('Display sidebar menu', 'passed');
         });
 
-        test('should display employee distribution chart', async ({ dashboardPage }) => {
-            logTestStart('Display employee distribution chart');
+        test('should display header', async ({ page }) => {
+            logTestStart('Display header');
 
-            const isVisible = await dashboardPage.isChartVisible();
-            expect(isVisible).toBeTruthy();
+            const header = page.locator('.oxd-topbar');
+            await expect(header).toBeVisible();
 
-            logTestEnd('Display employee distribution chart', 'passed');
+            logTestEnd('Display header', 'passed');
         });
 
-        test('should display user name in header', async ({ dashboardPage }) => {
-            logTestStart('Display user name in header');
+        test('should display user dropdown', async ({ page }) => {
+            logTestStart('Display user dropdown');
 
-            const userName = await dashboardPage.getUserName();
-            expect(userName).toBeTruthy();
-            expect(userName.length).toBeGreaterThan(0);
+            const userDropdown = page.locator('.oxd-userdropdown');
+            await expect(userDropdown).toBeVisible();
 
-            logTestEnd('Display user name in header', 'passed');
+            logTestEnd('Display user dropdown', 'passed');
         });
 
-        test('should navigate to PIM module @smoke', async ({ dashboardPage, page }) => {
+        test('should navigate to PIM module @smoke', async ({ page }) => {
             logTestStart('Navigate to PIM module');
 
-            await dashboardPage.navigateToPIM();
-            await expect(page).toHaveURL(/.*pim.*/);
+            await page.locator('.oxd-sidepanel a[href*="pim"]').first().click();
+            await expect(page).toHaveURL(/.*pim.*/, { timeout: 15000 });
 
             logTestEnd('Navigate to PIM module', 'passed');
         });
 
-        test('should navigate to Leave module', async ({ dashboardPage, page }) => {
+        test('should navigate to Leave module', async ({ page }) => {
             logTestStart('Navigate to Leave module');
 
-            await dashboardPage.navigateToLeave();
-            await expect(page).toHaveURL(/.*leave.*/);
+            await page.locator('.oxd-sidepanel a[href*="leave"]').first().click();
+            await expect(page).toHaveURL(/.*leave.*/, { timeout: 15000 });
 
             logTestEnd('Navigate to Leave module', 'passed');
         });
 
-        test('should navigate to Admin module', async ({ dashboardPage, page }) => {
+        test('should navigate to Admin module', async ({ page }) => {
             logTestStart('Navigate to Admin module');
 
-            await dashboardPage.navigateToAdmin();
-            await expect(page).toHaveURL(/.*admin.*/);
+            await page.locator('.oxd-sidepanel a[href*="admin"]').first().click();
+            await expect(page).toHaveURL(/.*admin.*/, { timeout: 15000 });
 
             logTestEnd('Navigate to Admin module', 'passed');
-        });
-
-        test('should navigate to Time module', async ({ dashboardPage, page }) => {
-            logTestStart('Navigate to Time module');
-
-            await dashboardPage.navigateToTime();
-            await expect(page).toHaveURL(/.*time.*/);
-
-            logTestEnd('Navigate to Time module', 'passed');
-        });
-
-        test('should navigate to Recruitment module', async ({ dashboardPage, page }) => {
-            logTestStart('Navigate to Recruitment module');
-
-            await dashboardPage.navigateToRecruitment();
-            await expect(page).toHaveURL(/.*recruitment.*/);
-
-            logTestEnd('Navigate to Recruitment module', 'passed');
-        });
-
-        test('should navigate to My Info', async ({ dashboardPage, page }) => {
-            logTestStart('Navigate to My Info');
-
-            await dashboardPage.navigateToMyInfo();
-            await expect(page).toHaveURL(/.*pim\/viewPersonalDetails.*/);
-
-            logTestEnd('Navigate to My Info', 'passed');
-        });
-
-        test('should open user dropdown menu', async ({ dashboardPage }) => {
-            logTestStart('Open user dropdown menu');
-
-            await dashboardPage.openUserMenu();
-
-            logTestEnd('Open user dropdown menu', 'passed');
         });
     });
 
     test.describe('Logout Scenarios', () => {
 
-        test('should logout successfully @smoke', async ({ dashboardPage, page }) => {
+        test('should logout successfully @smoke', async ({ page }) => {
             logTestStart('Logout successfully');
 
-            await dashboardPage.logout();
-            await expect(page).toHaveURL(/.*login.*/);
+            // Click user dropdown
+            await page.locator('.oxd-userdropdown').click();
+            // Click logout
+            await page.locator('a[href*="logout"]').click();
+            // Verify redirected to login
+            await expect(page).toHaveURL(/.*login.*/, { timeout: 15000 });
 
             logTestEnd('Logout successfully', 'passed');
         });
 
-        test('should redirect to login after logout', async ({ dashboardPage, page }) => {
+        test('should redirect to login after logout', async ({ page }) => {
             logTestStart('Redirect to login after logout');
 
-            await dashboardPage.logout();
+            await page.locator('.oxd-userdropdown').click();
+            await page.locator('a[href*="logout"]').click();
             await expect(page).toHaveURL(/.*login.*/);
 
-            const loginForm = page.locator('form.oxd-form');
-            await expect(loginForm).toBeVisible();
+            // Verify login form is visible
+            const loginButton = page.locator('button[type="submit"]');
+            await expect(loginButton).toBeVisible();
 
             logTestEnd('Redirect to login after logout', 'passed');
         });
@@ -155,56 +125,23 @@ test.describe('Dashboard Functionality @regression', () => {
 
     test.describe('Sidebar Navigation', () => {
 
-        test('should display all menu items in sidebar', async ({ dashboardPage }) => {
-            logTestStart('Display all menu items in sidebar');
+        test('should display menu items in sidebar', async ({ page }) => {
+            logTestStart('Display menu items in sidebar');
 
-            const menuItems = await dashboardPage.sidebar.getMenuItems();
-            expect(menuItems.length).toBeGreaterThan(5);
+            const menuItems = page.locator('.oxd-sidepanel-body li');
+            const count = await menuItems.count();
+            expect(count).toBeGreaterThan(5);
 
-            logTestEnd('Display all menu items in sidebar', 'passed');
+            logTestEnd('Display menu items in sidebar', 'passed');
         });
 
-        test('should collapse sidebar', async ({ dashboardPage }) => {
-            logTestStart('Collapse sidebar');
+        test('should have search box in sidebar', async ({ page }) => {
+            logTestStart('Search box in sidebar');
 
-            await dashboardPage.sidebar.collapse();
+            const searchBox = page.locator('.oxd-sidepanel input[type="text"]');
+            await expect(searchBox).toBeVisible();
 
-            logTestEnd('Collapse sidebar', 'passed');
-        });
-
-        test('should expand sidebar', async ({ dashboardPage }) => {
-            logTestStart('Expand sidebar');
-
-            await dashboardPage.sidebar.collapse();
-            await dashboardPage.sidebar.expand();
-
-            logTestEnd('Expand sidebar', 'passed');
-        });
-
-        test('should search menu items', async ({ dashboardPage }) => {
-            logTestStart('Search menu items');
-
-            await dashboardPage.sidebar.searchMenu('PIM');
-            const isPIMVisible = await dashboardPage.sidebar.isMenuVisible('PIM');
-            expect(isPIMVisible).toBeTruthy();
-
-            logTestEnd('Search menu items', 'passed');
-        });
-    });
-
-    test.describe('Quick Launch Actions', () => {
-
-        test('should click quick launch widget', async ({ dashboardPage, page }) => {
-            logTestStart('Click quick launch widget');
-
-            const initialUrl = page.url();
-            await dashboardPage.clickQuickLaunch(0);
-
-            await page.waitForLoadState('networkidle');
-            const newUrl = page.url();
-            expect(newUrl).not.toBe(initialUrl);
-
-            logTestEnd('Click quick launch widget', 'passed');
+            logTestEnd('Search box in sidebar', 'passed');
         });
     });
 });

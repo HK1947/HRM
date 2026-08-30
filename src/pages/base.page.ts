@@ -52,8 +52,17 @@ export abstract class BasePage {
         });
     }
 
-    async waitForElement(locator: Locator, timeout = 10000): Promise<void> {
+    async waitForElement(locator: Locator, timeout = 30000): Promise<void> {
         await locator.waitFor({ state: 'visible', timeout });
+    }
+
+    async waitForElementSoft(locator: Locator, timeout = 5000): Promise<boolean> {
+        try {
+            await locator.waitFor({ state: 'visible', timeout });
+            return true;
+        } catch {
+            return false;
+        }
     }
 
     async clickElement(locator: Locator): Promise<void> {

@@ -20,21 +20,19 @@ test.describe('iFrame Handling @iframe @external', () => {
         test('should interact with elements inside iframe @smoke', async ({ page }) => {
             logTestStart('Basic iframe interaction');
 
-            // Navigate to a page with iframes
             await page.goto('https://the-internet.herokuapp.com/iframe');
 
-            /**
-             * INTERVIEW TIP: "frameLocator() creates a scoped locator
-             * that searches only within the specified iframe"
-             */
             const frame = page.frameLocator('#mce_0_ifr');
 
-            // Type in the iframe's editor
+            // TinyMCE editor is contenteditable, not a regular input
             const editor = frame.locator('#tinymce');
-            await editor.clear();
-            await editor.fill('Hello from Playwright!');
+            await expect(editor).toBeVisible({ timeout: 10000 });
 
-            // Verify the text was entered
+            // Clear using keyboard shortcuts and type
+            await editor.click();
+            await page.keyboard.press('Control+A');
+            await page.keyboard.type('Hello from Playwright!');
+
             await expect(editor).toContainText('Hello from Playwright!');
 
             logTestEnd('Basic iframe interaction', 'passed');

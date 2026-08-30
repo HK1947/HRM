@@ -5,7 +5,6 @@
  *
  * WHAT: Playwright fixtures that inject page objects into tests.
  * WHY: Tests declare what they need, fixtures provide it - DI pattern.
- * IF NOT USED: Manual page object instantiation in every test.
  * INTERVIEW TIP: "Fixtures are Playwright's DI mechanism - automatic setup/teardown"
  * ═══════════════════════════════════════════════════════════════════════════
  */
@@ -20,6 +19,16 @@ export interface PageFixtures {
     addEmployeePage: AddEmployeePage;
 }
 
+async function ensureLoggedIn(page: any) {
+    const url = page.url();
+    if (url.includes('login') || url === 'about:blank') {
+        const loginPage = new LoginPage(page);
+        await loginPage.navigate();
+        await loginPage.login({ username: 'Admin', password: 'admin123' });
+        await page.waitForURL(/.*dashboard.*/, { timeout: 30000 });
+    }
+}
+
 export const pageFixtures = base.extend<PageFixtures>({
     loginPage: async ({ page }, use) => {
         const loginPage = new LoginPage(page);
@@ -27,16 +36,19 @@ export const pageFixtures = base.extend<PageFixtures>({
     },
 
     dashboardPage: async ({ page }, use) => {
+        await ensureLoggedIn(page);
         const dashboardPage = new DashboardPage(page);
         await use(dashboardPage);
     },
 
     pimPage: async ({ page }, use) => {
+        await ensureLoggedIn(page);
         const pimPage = new PIMPage(page);
         await use(pimPage);
     },
 
     addEmployeePage: async ({ page }, use) => {
+        await ensureLoggedIn(page);
         const addEmployeePage = new AddEmployeePage(page);
         await use(addEmployeePage);
     }
